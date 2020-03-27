@@ -9,6 +9,17 @@ import "@babel/polyfill";
 import './app.css';
 
 export default class App extends Component {
+
+  state = {
+    selectedPeron: null
+  };
+
+  onPersonSelected =(id)=> {
+    this.setState({
+      selectedPerson: id
+    })
+  };
+
   render() {
     return (
       <div>
@@ -16,10 +27,11 @@ export default class App extends Component {
         <RandomPlanet/>
         <div className="row mb2">
           <div className="col-md-6">
-            <ItemList/>
+            <ItemList
+              onItemSelected={ this.onPersonSelected}/>
           </div>
           <div className="col-md-6">
-            <PersonDetails/>
+            <PersonDetails personId={this.state.selectedPerson}/>
           </div>
         </div>
       </div>
