@@ -59,6 +59,10 @@ export default class PersonDetails extends Component {
     const errorMessages= error? <ErrorIndicator/> : null;
     const spinner = loading ? <Spinner/>  :null;
     const content = hasData ? <PersonView person = {person} /> : null;
+
+    if(!this.state.person){
+      return <span>Select a person from a list</span>;
+    }
     return (
       <div className="person-details card">
         {errorMessages}
