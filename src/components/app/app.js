@@ -6,7 +6,7 @@ import ErrorBoundry from "../error-boundry";
 import SwapiService from "../../services/swapi-service";
 import DummySwapiService from "../../services/dummy-swapi-service";
 
-import {PeoplePage, PlanetsPage, StarshipsPage} from '../pages'
+import {PeoplePage, PlanetsPage, StarshipsPage,LoginPage,SecretPage} from '../pages'
 import {SwapiServiceProvider} from "../swapi-service-context/swapi-service-context";
 
 import './app.css';
@@ -17,7 +17,8 @@ import StarshipDetails from "../sw-components/starship-details";
 export default class App extends Component {
 
   state = {
-    swapiService: new SwapiService()
+    swapiService: new SwapiService(),
+    isLoggedIn: false
   };
 
   onServiceChange = () => {
@@ -33,7 +34,15 @@ export default class App extends Component {
     });
   };
 
+  onLogin =() => {
+    this.setState({
+      isLoggedIn: true
+    })
+  };
+
   render() {
+
+    const {isLoggedIn} = this.state;
     return (
       <ErrorBoundry>
         <SwapiServiceProvider value={this.state.swapiService}>
@@ -42,7 +51,7 @@ export default class App extends Component {
               <Header onServiceChange={this.onServiceChange}/>
               <RandomPlanet  />
               <Route path="/" render={()=> <h2>Hello, my dear friend!</h2>} exact/>
-              <Route path="/people" component={PeoplePage}/>
+              <Route path="/people/:id?" component={PeoplePage}/>
               <Route path="/planets" component={PlanetsPage}/>
               <Route path="/starships" component={StarshipsPage} exact/>
 
@@ -51,6 +60,15 @@ export default class App extends Component {
                 console.log(match);
                 return <StarshipDetails itemId={id}/>
               }}/>
+
+              <Route path="/login" render={()=> (
+                <LoginPage
+                  isLoggedIn={isLoggedIn}
+                  onLogin={this.onLogin}/>
+                  )}/>
+              <Route path="/secret" render={()=> (
+                <SecretPage isLoggedIn={isLoggedIn}/>
+                )}/>
             </div>
           </Router>
         </SwapiServiceProvider>
